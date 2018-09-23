@@ -66,21 +66,34 @@ Configuration Parameters
 - - ```labels```: labels dictionary to apply to all logs (default = None),
 - - ```resource```:  Cloud Logging resource to log against (default='global')
 
-
-## Install
+## Quickstart
 
 ```
+virtualenv env
+source env/bin/activate
 pip install flask-gcp-log-groups
+
+wget https://raw.githubusercontent.com/salrashid123/flask-gcp-log-groups/master/testing/main.py
+
+python main.py
+```
+
+then in a new window
+
+```
+curl -v  -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36" \
+    -H "X-Cloud-Trace-Context: `python -c "import uuid; print uuid.uuid4()"`" \
+    http://localhost:8080/
 ```
 
 ## Viewing logs
 
-If the flask app is deployed behind a GCP Loadbalancer that automatically emits ```X-Cloud-Trace-Context```, you can view the collapsed logs in cloud logging 
+If the flask app is deployed behind a GCP Loadbalancer that automatically emits ```X-Cloud-Trace-Context```, you can view the collapsed logs in cloud logging
 under ```Cloud Logging >> Global``` filter on the GCP Console.
 
---- 
+---
 
-## Local Testing
+## Sample Usage
 
 - main.py:
 
