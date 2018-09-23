@@ -12,7 +12,7 @@ with io.open(readme_filename, encoding='utf-8') as readme_file:
 
 setuptools.setup(
     name="flask-gcp-log-groups",
-    version="0.0.7",
+    version="0.0.8",
     author="Sal Rashid",
     author_email="salrashid123@gmail.com",
     description="Python Flask logging handler to group messages on Google Cloud Platform",
@@ -21,7 +21,7 @@ setuptools.setup(
     install_requires=[
           'google-cloud-logging',
           'flask'
-    ],    
+    ],
     packages=setuptools.find_packages(),
     classifiers=[
         "License :: OSI Approved :: Apache Software License",
