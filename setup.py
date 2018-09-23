@@ -1,16 +1,22 @@
 import setuptools
+import io
+import os
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
+
+package_root = os.path.abspath(os.path.dirname(__file__))
+
+readme_filename = os.path.join(package_root, 'README.rst')
+with io.open(readme_filename, encoding='utf-8') as readme_file:
+    readme = readme_file.read()
+
 
 setuptools.setup(
     name="flask-gcp-log-groups",
-    version="0.0.1",
+    version="0.0.7",
     author="Sal Rashid",
     author_email="salrashid123@gmail.com",
     description="Python Flask logging handler to group messages on Google Cloud Platform",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
+    long_description=readme,
     url="https://github.com/salrashid123/flask-gcp-log-groups",
     install_requires=[
           'google-cloud-logging',

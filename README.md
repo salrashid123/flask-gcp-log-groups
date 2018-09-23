@@ -2,6 +2,8 @@
 
 Flask extension that allows log lines emitted within a request handler to display/render together.
 
+- [https://pypi.org/project/flask-gcp-log-groups/](https://pypi.org/project/flask-gcp-log-groups/)
+
 Normally, when using Google Cloud Logging libraries ( [google-cloud-logging](https://pypi.org/project/google-cloud-logging/) and [CloudLoggingHander](https://googlecloudplatform.github.io/google-cloud-python/latest/logging/handlers.html)), each log entry that gets emitted is displayed separately within the Logging UI.  However, its desireable to group all logs together that logically belong that way in an HTTP Request.  For a given HTTP Request into FLask, this extension displays all the logs 'together' below the parent request.
 
 For example, in the  following snippet, all log lines will appear under one top-level HTTP Request within [Google Cloud Logging](https://cloud.google.com/logging/):
