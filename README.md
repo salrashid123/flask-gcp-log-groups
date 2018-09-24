@@ -13,21 +13,6 @@ For example, in the  following snippet, all log lines will appear under one top-
 def default():
   app.logger.setLevel(logging.INFO)
   app.logger.info("I met a traveller from an antique land,")
-  app.logger.info("Who said: Two vast and trunkless legs of stone")
-  app.logger.info("Stand in the desert... near them, on the sand,")
-  app.logger.info("Half sunk, a shattered visage lies, whose frown,")
-  app.logger.info("And wrinkled lip, and sneer of cold command,")
-  app.logger.info("Tell that its sculptor well those passions read")
-  app.logger.info("Which yet survive, stamped on these lifeless things,")
-  app.logger.info("The hand that mocked them and the heart that fed;")
-
-  app.logger.info("And on the pedestal these words appear:")
-  app.logger.error("'My name is Ozymandias, king of kings;")
-  app.logger.error("Look on my works, ye Mighty, and despair!'")
-  app.logger.info("Nothing beside remains. Round the decay")
-  app.logger.info("Of that colossal wreck, boundless and bare")
-  app.logger.info("The lone and level sands stretch far away.")
-
   app.logger.info( { "author": {
                                  "firstName": "PERCY",
                                  "lastName": "SHELLEY"
@@ -66,6 +51,11 @@ Configuration Parameters
 - - ```labels```: labels dictionary to apply to all logs (default = None),
 - - ```resource```:  Cloud Logging resource to log against (default='global')
 
+Once the logging handler is initialized, you can directly emit either a ```text_payload``` or ```json_payload``` as shown above.  The JSON payload allows for easy filtering on GCP logging console.
+
+The logging handler will aggregate the applicaiton logs and tag the top-level request log with the the highest priority.  That is, if any app log is emitted at level `ERROR`, then the overall aggregated request log will acquire that level.
+
+
 ## Quickstart
 
 ```
@@ -90,6 +80,8 @@ curl -v  -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_3) AppleWe
 
 If the flask app is deployed behind a GCP Loadbalancer that automatically emits ```X-Cloud-Trace-Context```, you can view the collapsed logs in cloud logging
 under ```Cloud Logging >> Global``` filter on the GCP Console.
+
+>> Note: logs display on GCP Cloud Console under `global` will show _all_ logs in one set together. 
 
 ---
 
