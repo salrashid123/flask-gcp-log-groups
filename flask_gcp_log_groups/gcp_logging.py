@@ -41,7 +41,7 @@ class GCPHandler(logging.Handler):
         self.mLogLevels.append(SEVERITY)
         TRACE = None
         SPAN = None
-        if (self.traceHeaderName):
+        if request.headers.get(self.traceHeaderName):
           # trace can be formatted as "X-Cloud-Trace-Context: TRACE_ID/SPAN_ID;o=TRACE_TRUE"
           rawTrace = request.headers.get(self.traceHeaderName).split('/')
           TRACE = rawTrace[0]
