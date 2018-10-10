@@ -11,7 +11,7 @@ from flask import Flask
 from flask import request, Response, render_template, g, jsonify, current_app
 
 from google.cloud import logging as gcplogging
-from background_thread import BackgroundThreadTransport
+from .background_thread import BackgroundThreadTransport
 
 logger = logging.getLogger(__name__)
 client = gcplogging.Client()
