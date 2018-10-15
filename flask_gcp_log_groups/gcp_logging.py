@@ -11,7 +11,7 @@ from flask import Flask
 from flask import request, Response, render_template, g, jsonify, current_app
 
 from google.cloud import logging as gcplogging
-from background_thread import BackgroundThreadTransport
+from flask_gcp_log_groups.background_thread import BackgroundThreadTransport
 
 logger = logging.getLogger(__name__)
 client = gcplogging.Client()
@@ -41,7 +41,7 @@ class GCPHandler(logging.Handler):
         self.mLogLevels.append(SEVERITY)
         TRACE = None
         SPAN = None
-        if (self.traceHeaderName):
+        if (self.traceHeaderName in request.headers.keys()):
           # trace can be formatted as "X-Cloud-Trace-Context: TRACE_ID/SPAN_ID;o=TRACE_TRUE"
           rawTrace = request.headers.get(self.traceHeaderName).split('/')
           TRACE = rawTrace[0]
@@ -70,7 +70,7 @@ class GCPHandler(logging.Handler):
         def add_logger(response):
             TRACE = None
             SPAN = None
-            if (self.traceHeaderName):
+            if (self.traceHeaderName in request.headers.keys()):
               # trace can be formatted as "X-Cloud-Trace-Context: TRACE_ID/SPAN_ID;o=TRACE_TRUE"
               rawTrace = request.headers.get(self.traceHeaderName).split('/')
               TRACE = rawTrace[0]
