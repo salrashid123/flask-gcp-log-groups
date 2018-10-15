@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from .gcp_logging import GCPHandler
+from flask_gcp_log_groups.gcp_logging import GCPHandler
