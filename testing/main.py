@@ -13,7 +13,12 @@ g = GCPHandler(app, parentLogName="request",
     childLogName="application",
     traceHeaderName='X-Cloud-Trace-Context',
     labels= {'foo': 'bar', 'baz': 'qux'},
-    resource='global')
+    resource= {
+                "type": "gce_instance",
+                "labels": { "instance_id": "5160310737730769780",
+                            "zone": "us-central1-a" 
+              }
+    })
 g.setLevel(logging.INFO)
 app.logger.addHandler(g)
 
@@ -39,7 +44,7 @@ def default():
   app.logger.info( { "author": {
                                  "firstName": "PERCY",
                                  "lastName": "SHELLEY"
-                               }, 
+                               },
                      "title": "Ozymandias"
                    } )
   return 'ok'

@@ -83,14 +83,14 @@ class _Worker(object):
                     # all items we got back before quitting.
                 else:
                     if (item['message'] is  None):
-                      batch.log_text(None,  timestamp=item['timestamp'], labels=item['labels'], severity=item['severity'], trace=item['trace'], span_id=item['span_id'], http_request=item['http_request']) 
+                      batch.log_text(None,  timestamp=item['timestamp'], labels=item['labels'], resource=item['resource'], severity=item['severity'], trace=item['trace'], span_id=item['span_id'], http_request=item['http_request']) 
                     else:
                       try:
                           msg=ast.literal_eval(item['message'])
-                          batch.log_struct(msg,  timestamp=item['timestamp'], labels=item['labels'], severity=item['severity'], trace=item['trace'], span_id=item['span_id'], http_request=item['http_request'])
+                          batch.log_struct(msg,  timestamp=item['timestamp'], labels=item['labels'], resource=item['resource'], severity=item['severity'], trace=item['trace'], span_id=item['span_id'], http_request=item['http_request'])
                       except Exception as e:
                         #print("Error " + str(e))
-                        batch.log_text(item['message'],  timestamp=item['timestamp'], labels=item['labels'], severity=item['severity'], trace=item['trace'], span_id=item['span_id'], http_request=item['http_request']) 
+                        batch.log_text(item['message'],  timestamp=item['timestamp'], labels=item['labels'], resource=item['resource'], severity=item['severity'], trace=item['trace'], span_id=item['span_id'], http_request=item['http_request']) 
 
             self._safely_commit_batch(batch)
 

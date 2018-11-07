@@ -11,7 +11,11 @@ from flask import Flask
 from flask import request, Response, render_template, g, jsonify, current_app
 
 from google.cloud import logging as gcplogging
+from google.cloud.logging.resource import Resource
+
 from flask_gcp_log_groups.background_thread import BackgroundThreadTransport
+
+_GLOBAL_RESOURCE = Resource(type='global', labels={})
 
 logger = logging.getLogger(__name__)
 client = gcplogging.Client()
@@ -19,11 +23,16 @@ client = gcplogging.Client()
 class GCPHandler(logging.Handler):
     
     def __init__(self, app, parentLogName='request', childLogName='application', 
-                traceHeaderName=None,labels=None, resource='global'):
+                traceHeaderName=None,labels=None, resource=None):
         logging.Handler.__init__(self)
         self.app = app
         self.labels=labels
         self.traceHeaderName = traceHeaderName
+        if (resource is None):
+            resource = _GLOBAL_RESOURCE
+        else:
+            resource = Resource(type=resource['type'], labels=resource['labels'])
+            print str( resource)
         self.resource = resource
         self.transport_parent = BackgroundThreadTransport(client, parentLogName)
         self.transport_child = BackgroundThreadTransport(client, childLogName)           
