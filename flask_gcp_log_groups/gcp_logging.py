@@ -32,7 +32,7 @@ class GCPHandler(logging.Handler):
             resource = _GLOBAL_RESOURCE
         else:
             resource = Resource(type=resource['type'], labels=resource['labels'])
-            print str( resource)
+            print(resource)
         self.resource = resource
         self.transport_parent = BackgroundThreadTransport(client, parentLogName)
         self.transport_child = BackgroundThreadTransport(client, childLogName)           
@@ -45,7 +45,7 @@ class GCPHandler(logging.Handler):
         SEVERITY = record.levelname
 
         # if the current log is at a lower level than is setup, skip it
-        if (record.levelname <= logging.getLevelName):
+        if (record.levelno <= logger.level):
             return
         self.mLogLevels.append(SEVERITY)
         TRACE = None
