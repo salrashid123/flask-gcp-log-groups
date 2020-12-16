@@ -12,7 +12,7 @@ import ast
 from six.moves import range
 from six.moves import queue
 
-from google.cloud.logging.handlers.transports.base import Transport
+from google.cloud.logging_v2.handlers.transports.base import Transport
 
 _DEFAULT_GRACE_PERIOD = 5.0  # Seconds
 _DEFAULT_MAX_BATCH_SIZE = 10

@@ -11,7 +11,7 @@ from flask import Flask
 from flask import request, Response, render_template, g, jsonify, current_app
 
 from google.cloud import logging as gcplogging
-from google.cloud.logging.resource import Resource
+from google.cloud.logging_v2.resource import Resource
 
 from flask_gcp_log_groups.background_thread import BackgroundThreadTransport
 
@@ -109,7 +109,12 @@ class GCPHandler(logging.Handler):
                 if (response.status_code >= 400 ):
                    severity = logging.getLevelName(logging.ERROR)
             else:
-                severity= max(self.mLogLevels)
+                minLevel=logging.getLevelName(logging.DEBUG)
+                for lvl in self.mLogLevels:
+                  if getattr(logging, minLevel) < getattr(logging, lvl):
+                    minLevel = lvl
+                severity= minLevel
+
             self.mLogLevels=[]
             self.transport_parent.send(
                 None,
