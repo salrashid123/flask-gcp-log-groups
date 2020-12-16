@@ -109,7 +109,7 @@ class GCPHandler(logging.Handler):
                 if (response.status_code >= 400 ):
                    severity = logging.getLevelName(logging.ERROR)
             else:
-                severity= min(self.mLogLevels)
+                severity= max(self.mLogLevels)
             self.mLogLevels=[]
             self.transport_parent.send(
                 None,
