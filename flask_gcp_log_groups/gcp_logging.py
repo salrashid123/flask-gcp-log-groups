@@ -36,18 +36,20 @@ class GCPHandler(logging.Handler):
         self.resource = resource
         self.transport_parent = BackgroundThreadTransport(client, parentLogName)
         self.transport_child = BackgroundThreadTransport(client, childLogName)           
-        self.mLogLevels = []
+        self.mLogLevels = {}
         if app is not None:
             self.init_app(app)
             
     def emit(self, record):
         msg = self.format(record)
+        record_level = record.levelno
         SEVERITY = record.levelname
 
         # if the current log is at a lower level than is setup, skip it
-        if (record.levelno <= logger.level):
+        if (record_level <= logger.level):
             return
-        self.mLogLevels.append(SEVERITY)
+        if SEVERITY not in self.mLogLevels:
+            self.mLogLevels[SEVERITY] = record_level
         TRACE = None
         SPAN = None
         if (self.traceHeaderName in request.headers.keys()):
@@ -103,19 +105,19 @@ class GCPHandler(logging.Handler):
             if request.referrer:
                 REQUEST['referer'] = request.referrer
 
-            # find the log level priority sub-messages; apply the max level to the root log message 
-            if len(self.mLogLevels) == 0:
-                severity = logging.getLevelName(logging.INFO)
-                if (response.status_code >= 400 ):
-                   severity = logging.getLevelName(logging.ERROR)
-            else:
-                minLevel=logging.getLevelName(logging.DEBUG)
-                for lvl in self.mLogLevels:
-                  if getattr(logging, minLevel) < getattr(logging, lvl):
-                    minLevel = lvl
-                severity= minLevel
+            # add the response status_code based log level
+            response_severity = logging.getLevelName(logging.INFO)
+            if 400 <= response.status_code < 500:
+                response_severity = logging.getLevelName(logging.WARNING)
+            elif response.status_code >= 500:
+                response_severity = logging.getLevelName(logging.ERROR)
+            if response_severity not in self.mLogLevels:
+                self.mLogLevels[response_severity] = getattr(logging, response_severity)
 
-            self.mLogLevels=[]
+            # find the log level priority sub-messages; apply the max level to the root log message
+            severity = max(self.mLogLevels, key=self.mLogLevels.get)
+
+            self.mLogLevels = {}
             self.transport_parent.send(
                 None,
                 timestamp= datetime.datetime.utcnow(),
